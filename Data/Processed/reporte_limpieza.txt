@@ -1,0 +1,13 @@
+REPORTE DE LIMPIEZA
+====================
+filas_iniciales: 45215
+columnas_iniciales: 17
+nulos_por_columna: {'age': 0, 'job': 2, 'marital': 1, 'education': 1, 'default': 0, 'balance': 2, 'housing': 0, 'loan': 0, 'contact': 0, 'day': 0, 'month': 0, 'duration': 1, 'campaign': 0, 'pdays': 1, 'previous': 0, 'poutcome': 0, 'y': 0}
+estadisticas_numericas: {'age': {'count': 45215.0, 'mean': 41.0, 'std': 12.04, 'min': 18.0, '25%': 33.0, '50%': 39.0, '75%': 48.0, 'max': 776.0}, 'balance': {'count': 45213.0, 'mean': 1374.16, 'std': 3924.26, 'min': -8019.0, '25%': 72.0, '50%': 448.0, '75%': 1428.0, 'max': 527532.0}, 'day': {'count': 45215.0, 'mean': 15.81, 'std': 8.32, 'min': 1.0, '25%': 8.0, '50%': 16.0, '75%': 21.0, 'max': 31.0}, 'duration': {'count': 45214.0, 'mean': 258.07, 'std': 257.61, 'min': -1389.0, '25%': 103.0, '50%': 180.0, '75%': 319.0, 'max': 4918.0}, 'campaign': {'count': 45215.0, 'mean': 2.76, 'std': 3.1, 'min': 1.0, '25%': 1.0, '50%': 2.0, '75%': 3.0, 'max': 63.0}, 'pdays': {'count': 45214.0, 'mean': 40.19, 'std': 100.12, 'min': -1.0, '25%': -1.0, '50%': -1.0, '75%': -1.0, 'max': 871.0}, 'previous': {'count': 45215.0, 'mean': 0.58, 'std': 2.3, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 275.0}}
+conteos_categoricos: {'job': {'blue-collar': 9731, 'management': 9455, 'technician': 7599, 'admin.': 5168, 'services': 4153, 'retired': 2263, 'self-employed': 1578, 'entrepreneur': 1487, 'unemployed': 1303, 'housemaid': 1240}, 'marital': {'married': 27215, 'single': 12787, 'divorced': 5198, 'div.': 7, 'Single': 4, 'DIVORCED': 3, nan: 1}, 'education': {'secondary': 23197, 'tertiary': 13302, 'primary': 6849, 'unknown': 1855, 'SECONDARY': 3, 'Primary': 2, 'sec.': 2, 'UNK': 2, 'Secondary': 1, 'Tertiary': 1}, 'default': {'no': 44399, 'yes': 816}, 'housing': {'yes': 25132, 'no': 20083}, 'loan': {'no': 37962, 'yes': 7243, 'No': 5, 'YES': 2, 'NO': 2, 'Yes': 1}, 'contact': {'cellular': 29285, 'unknown': 13021, 'telephone': 2903, 'phone': 3, 'mobile': 3}, 'month': {'may': 13768, 'jul': 6895, 'aug': 6247, 'jun': 5342, 'nov': 3971, 'apr': 2932, 'feb': 2649, 'jan': 1403, 'oct': 738, 'sep': 579}, 'poutcome': {'unknown': 36958, 'failure': 4902, 'other': 1840, 'success': 1509, 'UNK': 4, 'Success': 2}, 'y': {'no': 39925, 'yes': 5290}}
+eliminadas_por_na: 8
+eliminadas_por_duplicados: 4
+eliminadas_por_filtros: 14
+filas_finales: 45189
+columnas_finales: 17
+ruta_salida: Data/Processed/dataset_banco_limpio.csv

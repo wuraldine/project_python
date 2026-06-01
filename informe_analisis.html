@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análisis del dataset bancario</title>
+  <style>
+    
+
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(249, 168, 37, 0.20), transparent 24%),
+        radial-gradient(circle at top right, rgba(194, 65, 12, 0.10), transparent 18%),
+        linear-gradient(180deg, #fff6ed 0%, #fff1e3 42%, #ffead7 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #4b2e20 0%, #8a5a3c 55%, #c79a6b 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 900px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .span-4 { grid-column: span 4; }
+    .span-3 { grid-column: span 3; }
+    .span-6 { grid-column: span 6; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    .metrics-centered {
+      grid-template-columns: repeat(12, 1fr);
+      max-width: 920px;
+      margin: 20px auto 0;
+    }
+
+    .metrics-centered .card {
+      grid-column: span 4;
+    }
+
+    .metric {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .metric .value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .metric .hint {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .context-card {
+      background: linear-gradient(180deg, #fffaf4 0%, #fff2e8 100%);
+      border-top: 4px solid var(--primary);
+    }
+
+    .metric-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #fffaf5 0%, #fff1e6 100%);
+    }
+
+    .metric-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--primary);
+    }
+
+    .metric-card.green::before { background: var(--success); }
+    .metric-card.orange::before { background: var(--warning); }
+    .metric-card.red::before { background: var(--accent); }
+    .metric-card.violet::before { background: var(--violet); }
+
+    .metric-card .value {
+      font-size: 2.3rem;
+    }
+
+    .metrics-centered {
+      grid-template-columns: repeat(12, 1fr);
+      max-width: 920px;
+      margin: 20px auto 0;
+    }
+
+    .metrics-centered .card {
+      grid-column: span 4;
+    }
+
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      align-items: start;
+    }
+
+    .cleaning-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: center;
+      background: linear-gradient(180deg, #fffaf5 0%, #fff1e6 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 18px 14px;
+    }
+
+    .cleaning-figure {
+      margin: 0;
+      text-align: center;
+    }
+
+    .insight-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .mini-chart {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 260px;
+      object-fit: contain;
+    }
+
+    .charts-row.small {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .chart-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .context-title {
+      display: inline-block;
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #b45309;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.45rem;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      margin-bottom: 14px;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .list li {
+      margin-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+      background: var(--card-strong);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f1dcc8;
+      text-align: left;
+    }
+
+    th {
+      background: #f7d8bf;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    td {
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .chart {
+      width: min(100%, 860px);
+      max-height: 380px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
+      background: #fffaf5;
+    }
+
+    .chart.small {
+      width: min(100%, 430px);
+      max-height: 330px;
+    }
+
+    .chart.small {
+      width: min(100%, 360px);
+      max-height: 300px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-top: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(217, 119, 6, 0.12);
+      color: #b45309;
+      margin-bottom: 12px;
+    }
+
+    .red {
+      color: #c2410c;
+      font-weight: 700;
+    }
+
+    .green {
+      color: #15803d;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .span-4, .span-6, .span-8, .span-12 {
+        grid-column: span 12;
+      }
+
+      .charts-row {
+        grid-template-columns: 1fr;
+      }
+
+      .cleaning-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>Análisis del dataset bancario</h1>
+      <p>
+        Este informe resume el proceso de limpieza, el comportamiento de conversión y las gráficas principales del proyecto.
+        El objetivo es identificar qué clientes tienen mayor probabilidad de adquirir el certificado de depósito a término.
+      </p>
+    </header>
+
+    <section class="grid" aria-label="Contexto del problema">
+      <article class="card span-12 context-card">
+        <span class="context-title"></span>
+        <h2>¿Qué responde este análisis?</h2>
+        <p>
+          Este análisis busca identificar el perfil de los clientes con mayor probabilidad de responder <strong>“Sí”</strong> a la oferta del banco. En este contexto, suscribirse significa que el cliente aceptó adquirir el certificado de depósito a término y formalizó el contrato.
+        </p>
+        <p>
+          Conocer las características de estos clientes permite dirigir futuras campañas de marketing hacia las personas con mayor potencial de aceptación, optimizando los recursos, reduciendo esfuerzos innecesarios y aumentando la efectividad de las estrategias de contacto.
+        </p>
+      </article>
+    </section>
+
+    <section class="grid" aria-label="Resumen general" style="margin-top: 20px;">
+      <article class="card span-4 metric metric-card">
+        <span class="label">Clientes analizados</span>
+        <span class="value">45.215</span>
+        <span class="hint">Registros originales del archivo CSV.</span>
+      </article>
+      <article class="card span-4 metric metric-card green">
+        <span class="label">Clientes interesados</span>
+        <span class="value green">5.285</span>
+        <span class="hint">Clientes con respuesta <strong>yes</strong>.</span>
+      </article>
+      <article class="card span-4 metric metric-card red">
+        <span class="label">Clientes no interesados</span>
+        <span class="value red">39.904</span>
+        <span class="hint">Clientes con respuesta <strong>no</strong>.</span>
+      </article>
+    </section>
+
+    <section class="grid metrics-centered">
+      <article class="card metric metric-card">
+        <span class="label">Variables analizadas</span>
+        <span class="value">17</span>
+        <span class="hint">Columnas del dataset original.</span>
+      </article>
+      <article class="card metric metric-card orange">
+        <span class="label">Tasa de conversión</span>
+        <span class="value">11.7%</span>
+        <span class="hint">Solo 1 de cada 9 dijo sí.</span>
+      </article>
+      <article class="card metric metric-card">
+        <span class="label">Filas finales</span>
+        <span class="value">45.189</span>
+        <span class="hint">Después de limpiar la base.</span>
+      </article>
+    </section>
+
+     <section class="grid" style="margin-top: 20px;">
+      <article class="card span-12">
+        <span class="badge">Gráficas principales</span>
+        <h2>Gráficas principales del análisis</h2>
+        <div class="charts-row">
+          <article class="chart-card">
+            <h3>Clientes interesados y no interesados en adquirir el producto</h3>
+            <img class="chart" src="Data/Processed/grafica_respuesta_clientes.png" alt="Gráfica de respuestas de clientes interesados y no interesados" />
+            <p class="note">Esta gráfica muestra la distribución de respuestas del cliente y destaca la minoría en rojo.</p>
+          </article>
+          <article class="chart-card">
+            <h3>Tasa de conversión por perfil laboral</h3>
+            <img class="chart" src="Data/Processed/grafica_comparativa_conversion.png" alt="Gráfica de tasa de conversión por perfil laboral" />
+            <p class="note">La tasa de conversión se compara por perfil laboral para identificar qué tipo de cliente responde mejor.</p>
+          </article>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid" style="margin-top: 20px;">
+      <article class="card span-12">
+        <span class="badge">Tabla de conversión</span>
+        <h2>Perfiles laborales con mejor respuesta</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Perfil laboral</th>
+              <th>Tasa de conversión</th>
+              <th>Clientes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>student</td><td>28,7%</td><td>937</td></tr>
+            <tr><td>retired</td><td>22,8%</td><td>2.263</td></tr>
+            <tr><td>unemployed</td><td>15,5%</td><td>1.303</td></tr>
+            <tr><td>management</td><td>13,7%</td><td>9.455</td></tr>
+            <tr><td>administrative</td><td>12,2%</td><td>5.168</td></tr>
+            <tr><td>self-employed</td><td>11,9%</td><td>1.578</td></tr>
+            <tr><td>unknown</td><td>11,8%</td><td>288</td></tr>
+            <tr><td>technician</td><td>11,1%</td><td>7.592</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="grid" style="margin-top: 20px;">
+      <article class="card span-12">
+        <span class="badge">Segmentos con mejor respuesta</span>
+        <h2>Perfiles con mayor potencial</h2>
+        <div class="insight-layout">
+          <p class="note" style="margin-top: 0;">
+            Aquí se resumen los hallazgos más útiles del análisis: los perfiles laborales de mejor respuesta,
+            el canal de contacto con mejor respuesta y el efecto de campañas previas exitosas.
+          </p>
+          <div class="insight-grid">
+            <article class="chart-card">
+              <h3>Clientes interesados por perfil laboral</h3>
+              <img class="mini-chart" src="Data/Processed/grafica_conversion_job.png" alt="Gráfica de conversión por perfil laboral" />
+            </article>
+            <article class="chart-card">
+              <h3>Clientes interesados por canal de contacto</h3>
+              <img class="mini-chart" src="Data/Processed/grafica_conversion_contacto.png" alt="Gráfica de conversión por canal de contacto" />
+            </article>
+            <article class="chart-card">
+              <h3>Clientes interesados según campaña anterior</h3>
+              <img class="mini-chart" src="Data/Processed/grafica_conversion_poutcome.png" alt="Gráfica de conversión según campaña anterior" />
+            </article>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid" style="margin-top: 20px;">
+      <article class="card span-12">
+        <span class="badge">Limpieza de datos</span>
+        <h2>¿Qué se hizo con la base?</h2>
+        <div class="cleaning-layout">
+          <div>
+            <ul class="list">
+              <li>Se eliminaron <strong>8</strong> filas con valores nulos.</li>
+              <li>Se eliminaron <strong>4</strong> filas duplicadas.</li>
+              <li>Se filtraron <strong>14</strong> registros con valores poco coherentes.</li>
+              <li>El dataset final quedó con <strong>45.189</strong> filas y <strong>17</strong> columnas. Eliminandose <strong>26 filas</strong> en total.</li>
+            </ul>
+            <p class="note">La gráfica resume el volumen eliminado por cada etapa de limpieza y ayuda a ver rápidamente dónde se hicieron los ajustes más importantes.</p>
+          </div>
+          <figure class="cleaning-figure">
+            <img class="chart small" src="Data/Processed/grafica_limpieza_barras.png" alt="Gráfica de barras con registros eliminados por limpieza" />
+          </figure>
+        </div>
+      </article>
+    </section>
+
+
+    <section class="grid" style="margin-top: 20px;">
+      <article class="card span-12">
+        <span class="badge">Resumen final</span>
+        <h2>Idea principal del proyecto</h2>
+        <p>
+          El proyecto limpia la base, resume la información más importante y muestra con gráficas qué clientes tienen mayor potencial de conversión.
+          El patrón más fuerte aparece en clientes jóvenes estudiantes, jubilados y desempleados, con mejor desempeño cuando el contacto es directo y la campaña anterior fue exitosa.
+        </p>
+      </article>
+    </section>
+  </div>
+</body>
+</html>
