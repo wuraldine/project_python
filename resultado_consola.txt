@@ -1,1 +1,58 @@
+Filas iniciales: 45215
+Columnas iniciales: 17
+    age           job  marital  education default  balance housing loan  contact  day month  duration  campaign  pdays  previous poutcome   y
+0    58    management  married   tertiary      no   2143.0     yes   no  unknown    5   may     261.0         1   -1.0         0  unknown  no
+1    44    technician   single  secondary      no     29.0     yes   no  unknown    5   may     151.0         1   -1.0         0  unknown  no
+2    33  entrepreneur  married  secondary      no      2.0     yes  yes  unknown    5   may      76.0         1   -1.0         0  unknown  no
+3    47   blue-collar  married    unknown      no   1506.0     yes   no  unknown    5   may      92.0         1   -1.0         0  unknown  no
+4    33       unknown   single    unknown      no      1.0      no   no  unknown    5   may     198.0         1   -1.0         0  unknown  no
+5    35    management  married   tertiary      no    231.0     yes   no  unknown    5   may     139.0         1   -1.0         0  unknown  no
+6    28    Management   single   tertiary      no    447.0     yes  yes  unknown    5   may     217.0         1   -1.0         0  unknown  no
+7    42  entrepreneur     div.   tertiary     yes      2.0     yes   no  unknown    5   may     380.0         1   -1.0         0  unknown  no
+8    58       retired  married    primary      no    121.0     yes   no  unknown    5   may      50.0         1   -1.0         0  unknown  no
+9    43    technician   single  secondary      no    593.0     yes   No  unknown    5   may      55.0         1   -1.0         0  unknown  no
+10   41        admin.     div.  secondary      no    270.0     yes   no  unknown    5   may     222.0         1   -1.0         0  unknown  no
+11   29        admin.   single  secondary      no    390.0     yes   no  unknown    5   may     137.0         1   -1.0         0      UNK  no
+12   53    technician  married  secondary      no      6.0     yes   no  unknown    5   may    -517.0         1   -1.0         0  unknown  no
+13   58    technician  married    unknown      no     71.0     yes   no  unknown    5   may      71.0         1   -1.0         0  unknown  no
+14   57      services  married  secondary      no    162.0     yes   No  unknown    5   may     174.0         1   -1.0         0  unknown  no
+15   51       retired  married    primary      no    229.0     yes   no  unknown    5   may     353.0         1   -1.0         0  unknown  no
+16   45        admin.   single    unknown      no     13.0     yes   no  unknown    5   may      98.0         1   -1.0         0  unknown  no
+17   57   blue-collar  married    primary      no     52.0     yes   no  unknown    5   may      38.0         1   -1.0         0  unknown  no
+18   60       retired  married    primary      no     60.0     yes   no  unknown    5   may     219.0         1   -1.0         0  unknown  no
+19   33      services  married  secondary      no      0.0     yes   no  unknown    5   may      54.0         1   -1.0         0  unknown  no
 
+
+Limpieza de datos
+Filas eliminadas por nulos: 8
+Filas eliminadas por duplicados: 4
+Filas eliminadas por filtros simples: 14
+
+
+Dataset limpio con la columna adicional 'rango_ingresos':
+    age             job   marital  education default  balance housing loan  contact  day month  duration  campaign  pdays  previous poutcome   y rango_ingresos
+0    58      management   married   tertiary      no   2143.0     yes   no  unknown    5   may     261.0         1   -1.0         0  unknown  no          1k-5k
+1    44      technician    single  secondary      no     29.0     yes   no  unknown    5   may     151.0         1   -1.0         0  unknown  no           0-1k
+2    33    entrepreneur   married  secondary      no      2.0     yes  yes  unknown    5   may      76.0         1   -1.0         0  unknown  no           0-1k
+3    47     blue-collar   married    unknown      no   1506.0     yes   no  unknown    5   may      92.0         1   -1.0         0  unknown  no          1k-5k
+4    33         unknown    single    unknown      no      1.0      no   no  unknown    5   may     198.0         1   -1.0         0  unknown  no           0-1k
+5    35      management   married   tertiary      no    231.0     yes   no  unknown    5   may     139.0         1   -1.0         0  unknown  no           0-1k
+6    28      management    single   tertiary      no    447.0     yes  yes  unknown    5   may     217.0         1   -1.0         0  unknown  no           0-1k
+7    42    entrepreneur  divorced   tertiary     yes      2.0     yes   no  unknown    5   may     380.0         1   -1.0         0  unknown  no           0-1k
+8    58         retired   married    primary      no    121.0     yes   no  unknown    5   may      50.0         1   -1.0         0  unknown  no           0-1k
+9    43      technician    single  secondary      no    593.0     yes   no  unknown    5   may      55.0         1   -1.0         0  unknown  no           0-1k
+10   41  administrative  divorced  secondary      no    270.0     yes   no  unknown    5   may     222.0         1   -1.0         0  unknown  no           0-1k
+11   29  administrative    single  secondary      no    390.0     yes   no  unknown    5   may     137.0         1   -1.0         0  unknown  no           0-1k
+13   58      technician   married    unknown      no     71.0     yes   no  unknown    5   may      71.0         1   -1.0         0  unknown  no           0-1k
+14   57        services   married  secondary      no    162.0     yes   no  unknown    5   may     174.0         1   -1.0         0  unknown  no           0-1k
+15   51         retired   married    primary      no    229.0     yes   no  unknown    5   may     353.0         1   -1.0         0  unknown  no           0-1k
+16   45  administrative    single    unknown      no     13.0     yes   no  unknown    5   may      98.0         1   -1.0         0  unknown  no           0-1k
+17   57     blue-collar   married    primary      no     52.0     yes   no  unknown    5   may      38.0         1   -1.0         0  unknown  no           0-1k
+18   60         retired   married    primary      no     60.0     yes   no  unknown    5   may     219.0         1   -1.0         0  unknown  no           0-1k
+19   33        services   married  secondary      no      0.0     yes   no  unknown    5   may      54.0         1   -1.0         0  unknown  no             <0
+20   28     blue-collar   married  secondary      no    723.0     yes  yes  unknown    5   may     262.0         1   -1.0         0  unknown  no           0-1k
+
+
+Resultado final
+Dataset limpio guardado en: Data/Processed/dataset_banco_limpio.csv
+Reporte guardado en: Data/Processed/reporte_limpieza.txt
