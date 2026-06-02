@@ -9,5 +9,5 @@ eliminadas_por_na: 8
 eliminadas_por_duplicados: 4
 eliminadas_por_filtros: 14
 filas_finales: 45189
-columnas_finales: 17
+columnas_finales: 18
 ruta_salida: Data/Processed/dataset_banco_limpio.csv

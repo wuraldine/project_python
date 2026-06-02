@@ -355,12 +355,12 @@
       <article class="card span-4 metric metric-card green">
         <span class="label">Clientes interesados</span>
         <span class="value green">5.285</span>
-        <span class="hint">Clientes con respuesta <strong>yes</strong>.</span>
+        <span class="hint">Clientes con respuesta <strong>"Si"</strong>.</span>
       </article>
       <article class="card span-4 metric metric-card red">
         <span class="label">Clientes no interesados</span>
         <span class="value red">39.904</span>
-        <span class="hint">Clientes con respuesta <strong>no</strong>.</span>
+        <span class="hint">Clientes con respuesta <strong>"No"</strong>.</span>
       </article>
     </section>
 
@@ -373,12 +373,33 @@
       <article class="card metric metric-card orange">
         <span class="label">Tasa de conversión</span>
         <span class="value">11.7%</span>
-        <span class="hint">Solo 1 de cada 9 dijo sí.</span>
+        <span class="hint">Solo 1 de cada 9 clientes dijo sí.</span>
       </article>
       <article class="card metric metric-card">
         <span class="label">Filas finales</span>
         <span class="value">45.189</span>
         <span class="hint">Después de limpiar la base.</span>
+      </article>
+    </section>
+
+     <section class="grid" style="margin-top: 20px;">
+      <article class="card span-12">
+        <span class="badge">Limpieza de datos</span>
+        <h2>¿Qué se hizo con la base?</h2>
+        <div class="cleaning-layout">
+          <div>
+            <ul class="list">
+              <li>Se eliminaron <strong>8</strong> filas con valores nulos.</li>
+              <li>Se eliminaron <strong>4</strong> filas duplicadas.</li>
+              <li>Se filtraron <strong>14</strong> registros con valores poco coherentes.</li>
+              <li>El dataset final quedó con <strong>45.189</strong> filas y <strong>17</strong> columnas. Eliminandose <strong>26 filas</strong> en total.</li>
+            </ul>
+            <p class="note">La gráfica resume el volumen eliminado por cada etapa de limpieza y ayuda a ver rápidamente dónde se hicieron los ajustes más importantes.</p>
+          </div>
+          <figure class="cleaning-figure">
+            <img class="chart small" src="Data/Processed/grafica_limpieza_barras.png" alt="Gráfica de barras con registros eliminados por limpieza" />
+          </figure>
+        </div>
       </article>
     </section>
 
@@ -401,11 +422,37 @@
       </article>
     </section>
 
+  <section class="grid" style="margin-top: 20px;">
+  <article class="card span-12">
+    <span class="badge">Ingresos vs Respuesta</span>
+    <h2>Conversión por rangos de ingresos</h2>
+    <div class="chart-card">
+      <h3>Tasa de conversión según rango de ingresos</h3>
+      <img class="chart" src="Data/Processed/grafica_conversion_rangos_ingresos.png" 
+           alt="Gráfica de conversión por rangos de ingresos" />
+      <p class="note">
+        Esta gráfica muestra cómo varía la tasa de conversión de clientes según su rango de ingresos (balance). 
+        Los intervalos permiten identificar qué segmentos económicos tienen mayor probabilidad de aceptar la oferta del banco. 
+        Por ejemplo, se observa si los clientes con ingresos bajos, medios o altos muestran diferencias significativas en su disposición a responder “Sí”.
+      </p>
+    </div>
+  </article>
+</section>
+
     <section class="grid" style="margin-top: 20px;">
       <article class="card span-12">
         <span class="badge">Tabla de conversión</span>
         <h2>Perfiles laborales con mejor respuesta</h2>
-        <table>
+        <p>Durante el análisis del dataset bancario, se calculó la tasa de conversión por perfil laboral, es decir, el porcentaje de clientes que respondieron afirmativamente a la oferta del producto.</p>
+
+        <p>Los resultados muestran que ciertos perfiles destacan por su mayor disposición a aceptar la propuesta:</p>
+
+        <ul>
+          <li><strong>Estudiantes:</strong> Presentan una tasa de conversión elevada, lo que indica que este grupo es más receptivo a las campañas bancarias. Probablemente se deba a que buscan productos financieros iniciales para comenzar su vida económica.</li>
+          <li><strong>Jubilados:</strong> También muestran una alta conversión. Este segmento suele valorar la seguridad y beneficios adicionales que ofrecen los productos bancarios, lo que los hace más propensos a aceptar.</li>
+          <li><strong>Desempleados:</strong> Muestran una tasa de conversión moderada, lo que indica que este grupo puede ser un objetivo interesante para campañas específicas.</li>
+        </ul></u>
+          <table>
           <thead>
             <tr>
               <th>Perfil laboral</th>
@@ -453,28 +500,6 @@
         </div>
       </article>
     </section>
-
-    <section class="grid" style="margin-top: 20px;">
-      <article class="card span-12">
-        <span class="badge">Limpieza de datos</span>
-        <h2>¿Qué se hizo con la base?</h2>
-        <div class="cleaning-layout">
-          <div>
-            <ul class="list">
-              <li>Se eliminaron <strong>8</strong> filas con valores nulos.</li>
-              <li>Se eliminaron <strong>4</strong> filas duplicadas.</li>
-              <li>Se filtraron <strong>14</strong> registros con valores poco coherentes.</li>
-              <li>El dataset final quedó con <strong>45.189</strong> filas y <strong>17</strong> columnas. Eliminandose <strong>26 filas</strong> en total.</li>
-            </ul>
-            <p class="note">La gráfica resume el volumen eliminado por cada etapa de limpieza y ayuda a ver rápidamente dónde se hicieron los ajustes más importantes.</p>
-          </div>
-          <figure class="cleaning-figure">
-            <img class="chart small" src="Data/Processed/grafica_limpieza_barras.png" alt="Gráfica de barras con registros eliminados por limpieza" />
-          </figure>
-        </div>
-      </article>
-    </section>
-
 
     <section class="grid" style="margin-top: 20px;">
       <article class="card span-12">

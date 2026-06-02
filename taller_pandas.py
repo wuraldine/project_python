@@ -2,31 +2,27 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+print("Librerías cargadas correctamente...")
+
 
 COLUMNAS_CATEGORICAS = [
-    "job",
-    "marital",
-    "education",
-    "default",
-    "housing",
-    "loan",
-    "contact",
-    "month",
-    "poutcome",
-    "y",
+    "job", "marital", "education", "default", "housing",
+    "loan", "contact", "month", "poutcome", "y",
 ]
 
+# -------------------------------
+# Funciones principales
+# -------------------------------
 
 def cargar_datos(ruta_entrada):
     try:
-        return pd.read_csv(ruta_entrada) 
+        return pd.read_csv(ruta_entrada)
     except FileNotFoundError:
         raise FileNotFoundError(f"No se encuentra el archivo: {ruta_entrada}")
 
 
 def normalizar_categoricas(dataframe: pd.DataFrame) -> pd.DataFrame:
     resultado = dataframe.copy()
-
 
     for columna in COLUMNAS_CATEGORICAS:
         if columna in resultado.columns:
@@ -54,11 +50,7 @@ def normalizar_categoricas(dataframe: pd.DataFrame) -> pd.DataFrame:
 
 def filtrar_registros(dataframe):
     resultado = dataframe.copy()
-    reporte = {
-        "eliminadas_por_na": 0,
-        "eliminadas_por_duplicados": 0,
-        "eliminadas_por_filtros": 0,
-    }
+    reporte = {"eliminadas_por_na": 0, "eliminadas_por_duplicados": 0, "eliminadas_por_filtros": 0}
 
     antes = len(resultado)
     resultado = resultado.dropna().copy()
@@ -115,23 +107,28 @@ def guardar_reporte(ruta_reporte, reporte):
 
 
 def crear_graficas_limpieza(reporte_limpieza, filas_iniciales, filas_finales) -> None:
-    eliminadas = pd.Series(
-        {
-            "Nulos": int(reporte_limpieza.get("eliminadas_por_na", 0)),
-            "Duplicados": int(reporte_limpieza.get("eliminadas_por_duplicados", 0)),
-            "Filtros": int(reporte_limpieza.get("eliminadas_por_filtros", 0)),
-        }
-    )
+    eliminadas = pd.Series({
+        "Nulos": int(reporte_limpieza.get("eliminadas_por_na", 0)),
+        "Duplicados": int(reporte_limpieza.get("eliminadas_por_duplicados", 0)),
+        "Filtros": int(reporte_limpieza.get("eliminadas_por_filtros", 0)),
+    })
 
-    # Gráfica de barras pequeña: filas eliminadas por tipo de limpieza
+    total_eliminadas = filas_iniciales - filas_finales
+
     plt.figure(figsize=(5.2, 3.2))
     ax_barras = sns.barplot(x=eliminadas.index, y=eliminadas.values, color="#8b5e3c")
+
     colores = ["#2E86AB", "#D97706", "#C0392B"]
     for barra, color in zip(ax_barras.patches, colores):
         barra.set_color(color)
-    plt.title("Registros eliminados por limpieza")
+
+    plt.title(
+        f"Filas eliminadas: {total_eliminadas} de {filas_iniciales} "
+        f"({total_eliminadas / filas_iniciales:.1%})"
+    )
     plt.xlabel("")
     plt.ylabel("Filas")
+
     for barra in ax_barras.patches:
         valor = int(barra.get_height())
         ax_barras.text(
@@ -142,6 +139,7 @@ def crear_graficas_limpieza(reporte_limpieza, filas_iniciales, filas_finales) ->
             va="bottom",
             fontsize=9,
         )
+
     plt.tight_layout()
     plt.savefig("Data/Processed/grafica_limpieza_barras.png", dpi=170, bbox_inches="tight")
     plt.close()
@@ -160,33 +158,7 @@ def crear_grafica_conversion_segmento(dataframe, columna, ruta_salida, titulo, t
     else:
         conversion = conversion.sort_values("conversion_rate", ascending=False)
 
-    etiquetas_es = {
-        "job": {
-            "student": "estudiante",
-            "retired": "jubilado",
-            "unemployed": "desempleado",
-            "management": "gerencia",
-            "administrative": "administrativo",
-            "self-employed": "autónomo",
-            "unknown": "desconocido",
-            "technician": "técnico",
-        },
-        "contact": {
-            "cellular": "celular",
-            "telephone": "teléfono",
-            "unknown": "desconocido",
-        },
-        "poutcome": {
-            "success": "éxito",
-            "failure": "fracaso",
-            "other": "otro",
-            "unknown": "desconocido",
-        },
-    }
-
-    if columna in etiquetas_es:
-        conversion = conversion.copy()
-        conversion[columna] = conversion[columna].replace(etiquetas_es[columna])
+    
 
     plt.figure(figsize=(5.6, 3.6))
     ax = sns.barplot(data=conversion, x="conversion_rate", y=columna, color="#2E86AB")
@@ -202,6 +174,39 @@ def crear_grafica_conversion_segmento(dataframe, columna, ruta_salida, titulo, t
     plt.tight_layout()
     plt.savefig(ruta_salida, dpi=170, bbox_inches="tight")
     plt.close()
+
+
+def grafica_ingresos_vs_respuesta_rangos(dataframe):
+
+    if "balance" in dataframe.columns and "y" in dataframe.columns:
+        
+        bins = [-2000, 0, 1000, 5000, 10000, 20000, dataframe["balance"].max()]
+        labels = ["<0", "0-1k", "1k-5k", "5k-10k", "10k-20k", "20k+"]
+        dataframe["rango_ingresos"] = pd.cut(dataframe["balance"], bins=bins, labels=labels)
+
+        
+        conversion = (
+            dataframe.assign(is_yes=(dataframe["y"] == "yes").astype(int))
+            .groupby("rango_ingresos")
+            .agg(conversion_rate=("is_yes", "mean"), clientes=("is_yes", "size"))
+            .reset_index()
+        )
+
+        plt.figure(figsize=(8, 5))
+        sns.barplot(x="rango_ingresos", y="conversion_rate", data=conversion, color="#2E86AB")
+        plt.title("Tasa de conversión por rango de ingresos")
+        plt.xlabel("Rango de ingresos (balance)")
+        plt.ylabel("Tasa de conversión")
+        for i, fila in enumerate(conversion["conversion_rate"]):
+            plt.text(i, fila + 0.01, f"{fila:.1%}", ha="center")
+        plt.tight_layout()
+        plt.savefig("Data/Processed/grafica_conversion_rangos_ingresos.png", dpi=160, bbox_inches="tight")
+        plt.close()
+
+
+# -------------------------------
+# Función principal
+# -------------------------------
 
 
 def main() -> None:
@@ -221,36 +226,9 @@ def main() -> None:
     print("\n1) Vista general")
     print(f"Filas iniciales: {resumen_inicial['filas_iniciales']}")
     print(f"Columnas iniciales: {resumen_inicial['columnas_iniciales']}")
-    print(data.head(5))
+    print(data.head(20))
 
     print("\n2) Gráfica de respuesta del cliente")
-    data_respuesta = data.copy()
-    data_respuesta["y_es"] = data_respuesta["y"].replace({"yes": "sí", "no": "no"})
-    plt.figure(figsize=(7, 4))
-    ax_respuesta = sns.countplot(x="y_es", data=data_respuesta, color="#2EAB3B")
-    plt.title("Clientes interesados y no interesados en adquirir el producto")
-    plt.xlabel("Respuesta del cliente")
-    plt.ylabel("Cantidad de clientes")
-    total_clientes = len(data_respuesta)
-    alturas = [barra.get_height() for barra in ax_respuesta.patches]
-    minima = min(alturas)
-    for barra in ax_respuesta.patches:
-        valor = int(barra.get_height())
-        porcentaje = valor / total_clientes * 100
-        if valor == minima:
-            barra.set_color("#C0392B")
-        ax_respuesta.text(
-            barra.get_x() + barra.get_width() / 2,
-            valor / 2,
-            f"{porcentaje:.1f}%",
-            ha="center",
-            va="center",
-            color="white",
-            fontweight="bold",
-        )
-    plt.tight_layout()
-    plt.savefig("Data/Processed/grafica_respuesta_clientes.png", dpi=160, bbox_inches="tight")
-    plt.close()
 
     print("\n3) Limpieza de datos")
     data_limpia = normalizar_categoricas(data)
@@ -263,34 +241,6 @@ def main() -> None:
     crear_graficas_limpieza(reporte_limpieza, resumen_inicial["filas_iniciales"], len(data_limpia))
 
     print("\n4) Gráfica de conversión")
-    conversion_por_trabajo = (
-        data_limpia.assign(is_yes=(data_limpia["y"] == "yes").astype(int))
-        .groupby("job")
-        .agg(conversion_rate=("is_yes", "mean"), clients=("is_yes", "size"))
-        .reset_index()
-        .query("clients >= 100")
-        .sort_values("conversion_rate", ascending=False)
-        .head(8)
-    )
-
-    print("\nTabla de conversión por perfil laboral")
-    print(conversion_por_trabajo.to_string(index=False))
-
-    plt.figure(figsize=(10, 6))
-    ax = sns.barplot(data=conversion_por_trabajo, x="job", y="conversion_rate", color="#2E86AB")
-    plt.title("Tasa de conversión por perfil laboral")
-    plt.xlabel("Perfil laboral")
-    plt.ylabel("Tasa de conversión")
-    plt.ylim(0, max(conversion_por_trabajo["conversion_rate"]) * 1.15)
-
-    for barra in ax.patches:
-        valor = barra.get_height()
-        ax.text(barra.get_x() + barra.get_width() / 2, valor + 0.005, f"{valor:.1%}", ha="center")
-
-    plt.tight_layout()
-    plt.savefig("Data/Processed/grafica_comparativa_conversion.png", dpi=160, bbox_inches="tight")
-    plt.close()
-
     crear_grafica_conversion_segmento(
         data_limpia,
         "job",
@@ -310,9 +260,13 @@ def main() -> None:
         "Data/Processed/grafica_conversion_poutcome.png",
         "Conversión según campaña previa",
     )
-    
 
-    data_limpia.to_csv(ruta_salida, index=False)
+    print("\n5) Conversión por rangos de ingresos (barras)")
+    grafica_ingresos_vs_respuesta_rangos(data_limpia)
+
+    print("\n✅ Dataset limpio con la columna adicional 'rango_ingresos':")
+   
+    print(data_limpia.head(20).to_string())
 
     reporte_final = {
         **resumen_inicial,
@@ -323,7 +277,7 @@ def main() -> None:
     }
     guardar_reporte(ruta_reporte, reporte_final)
 
-    print("\n5) Resultado final")
+    print("\n6) Resultado final")
     print(f"Dataset limpio guardado en: {ruta_salida}")
     print(f"Reporte guardado en: {ruta_reporte}")
     print(f"Tamaño final: {data_limpia.shape}")
