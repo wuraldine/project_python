@@ -10,10 +10,6 @@ COLUMNAS_CATEGORICAS = [
     "loan", "contact", "month", "poutcome", "y",
 ]
 
-# -------------------------------
-# Funciones principales
-# -------------------------------
-
 def cargar_datos(ruta_entrada):
     try:
         return pd.read_csv(ruta_entrada)
@@ -202,11 +198,6 @@ def grafica_ingresos_vs_respuesta_rangos(dataframe):
         plt.tight_layout()
         plt.savefig("Data/Processed/grafica_conversion_rangos_ingresos.png", dpi=160, bbox_inches="tight")
         plt.close()
-
-
-# -------------------------------
-# Función principal
-# -------------------------------
 
 
 def main() -> None:
