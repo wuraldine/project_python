@@ -67,13 +67,15 @@
     .span-12 { grid-column: span 12; }
 
     .metrics-centered {
-      grid-template-columns: repeat(12, 1fr);
-      max-width: 920px;
-      margin: 20px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 920px;
+    margin: 20px auto 0;
     }
 
     .metrics-centered .card {
-      grid-column: span 4;
+       grid-column: span 3;
     }
 
     .metric {
@@ -128,13 +130,15 @@
     }
 
     .metrics-centered {
-      grid-template-columns: repeat(12, 1fr);
-      max-width: 920px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      max-width: 1100px;
       margin: 20px auto 0;
     }
 
     .metrics-centered .card {
-      grid-column: span 4;
+      grid-column: auto;
     }
 
     .charts-row {
@@ -380,6 +384,11 @@
         <span class="value">45.189</span>
         <span class="hint">Después de limpiar la base.</span>
       </article>
+      <article class="card metric metric-card">
+        <span class="label">Variables finales</span>
+        <span class="value">18</span>
+        <span class="hint">Después de limpiar la base.</span>
+      </article>
     </section>
 
      <section class="grid" style="margin-top: 20px;">
@@ -392,7 +401,7 @@
               <li>Se eliminaron <strong>8</strong> filas con valores nulos.</li>
               <li>Se eliminaron <strong>4</strong> filas duplicadas.</li>
               <li>Se filtraron <strong>14</strong> registros con valores poco coherentes.</li>
-              <li>El dataset final quedó con <strong>45.189</strong> filas y <strong>17</strong> columnas. Eliminandose <strong>26 filas</strong> en total.</li>
+              <li>El dataset final quedó con <strong>45.189</strong> filas y <strong>18</strong> columnas. Eliminandose <strong>26 filas</strong> en total.</li>
             </ul>
             <p class="note">La gráfica resume el volumen eliminado por cada etapa de limpieza y ayuda a ver rápidamente dónde se hicieron los ajustes más importantes.</p>
           </div>
@@ -485,11 +494,11 @@
           </p>
           <div class="insight-grid">
             <article class="chart-card">
-              <h3>Clientes interesados por perfil laboral</h3>
+              <h3>Clientes interesados por perfil <br>laboral</h3>
               <img class="mini-chart" src="Data/Processed/grafica_conversion_job.png" alt="Gráfica de conversión por perfil laboral" />
             </article>
             <article class="chart-card">
-              <h3>Clientes interesados por canal de contacto</h3>
+              <h3>Clientes interesados por canal de <br>contacto</h3>
               <img class="mini-chart" src="Data/Processed/grafica_conversion_contacto.png" alt="Gráfica de conversión por canal de contacto" />
             </article>
             <article class="chart-card">
